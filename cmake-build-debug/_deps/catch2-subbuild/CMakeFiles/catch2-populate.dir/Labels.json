@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/Users/res_2/CLionProjects/EADS-labs/EADS-labs-1/cmake-build-debug/_deps/catch2-subbuild/CMakeFiles/catch2-populate"
+		},
+		{
+			"file" : "C:/Users/res_2/CLionProjects/EADS-labs/EADS-labs-1/cmake-build-debug/_deps/catch2-subbuild/CMakeFiles/catch2-populate.rule"
+		},
+		{
+			"file" : "C:/Users/res_2/CLionProjects/EADS-labs/EADS-labs-1/cmake-build-debug/_deps/catch2-subbuild/CMakeFiles/catch2-populate-complete.rule"
+		},
+		{
+			"file" : "C:/Users/res_2/CLionProjects/EADS-labs/EADS-labs-1/cmake-build-debug/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-build.rule"
+		},
+		{
+			"file" : "C:/Users/res_2/CLionProjects/EADS-labs/EADS-labs-1/cmake-build-debug/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-configure.rule"
+		},
+		{
+			"file" : "C:/Users/res_2/CLionProjects/EADS-labs/EADS-labs-1/cmake-build-debug/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-download.rule"
+		},
+		{
+			"file" : "C:/Users/res_2/CLionProjects/EADS-labs/EADS-labs-1/cmake-build-debug/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-install.rule"
+		},
+		{
+			"file" : "C:/Users/res_2/CLionProjects/EADS-labs/EADS-labs-1/cmake-build-debug/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-mkdir.rule"
+		},
+		{
+			"file" : "C:/Users/res_2/CLionProjects/EADS-labs/EADS-labs-1/cmake-build-debug/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-patch.rule"
+		},
+		{
+			"file" : "C:/Users/res_2/CLionProjects/EADS-labs/EADS-labs-1/cmake-build-debug/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-test.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"catch2-populate"
+		],
+		"name" : "catch2-populate"
+	}
+}
