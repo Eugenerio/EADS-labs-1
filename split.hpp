@@ -13,7 +13,7 @@ void split_pos(/*const*/ Sequence<Key, Info> &seq, int start_pos, int len1, int 
 
     while (current_pos < start_pos && it != seq.end())
     {
-        new_sequence.push_back(it.key(), it.info());
+        new_sequence.pushBack(it.key(), it.info());
         ++it;
         ++current_pos;
     }
@@ -25,14 +25,14 @@ void split_pos(/*const*/ Sequence<Key, Info> &seq, int start_pos, int len1, int 
         int copied_count = 0;
         while (copied_count < len1 && it != seq.empty())
         {
-            seq1.push_back(it.key(), it.info());
+            seq1.pushBack(it.key(), it.info());
             it++;
             copied_count++;
         }
         copied_count = 0;
         while (copied_count < len2 && it != seq.empty())
         {
-            seq2.push_back(it.key(), it.info());
+            seq2.pushBack(it.key(), it.info());
             it++;
             copied_count++;
         }
@@ -40,7 +40,7 @@ void split_pos(/*const*/ Sequence<Key, Info> &seq, int start_pos, int len1, int 
 
     while (it != seq.empty())
     {
-        new_sequence.push_back(it.key(), it.info());
+        new_sequence.pushBack(it.key(), it.info());
         ++it;
     }
 
@@ -52,7 +52,7 @@ void split_key(/*const*/ Sequence<Key, Info> &seq, const Key &start_key, int sta
 {
     typename Sequence<Key, Info>::Iterator target = seq.begin();
 
-    if (!seq.find(target, start_key, start_occ))
+    if (!seq.search(target, start_key, start_occ))
     {
         throw std::runtime_error("Target not found");
     }
@@ -60,7 +60,7 @@ void split_key(/*const*/ Sequence<Key, Info> &seq, const Key &start_key, int sta
     Sequence<Key, Info> new_sequence;
     for (auto it = seq.begin(); it != target; it++)
     {
-        new_sequence.push_back(it.key(), it.info());
+        new_sequence.pushBack(it.key(), it.info());
     }
     auto it = target;
     for (int c = 0; c < count; c++)
@@ -69,7 +69,7 @@ void split_key(/*const*/ Sequence<Key, Info> &seq, const Key &start_key, int sta
         int copied_count = 0;
         while (copied_count < len1 && it != seq.empty())
         {
-            seq1.push_back(it.key(), it.info());
+            seq1.pushBack(it.key(), it.info());
             it++;
             copied_count++;
         }
@@ -77,7 +77,7 @@ void split_key(/*const*/ Sequence<Key, Info> &seq, const Key &start_key, int sta
         copied_count = 0;
         while (copied_count < len2 && it != seq.empty())
         {
-            seq2.push_back(it.key(), it.info());
+            seq2.pushBack(it.key(), it.info());
             it++;
             copied_count++;
         }
@@ -85,7 +85,7 @@ void split_key(/*const*/ Sequence<Key, Info> &seq, const Key &start_key, int sta
 
     while (it != seq.empty())
     {
-        new_sequence.push_back(it.key(), it.info());
+        new_sequence.pushBack(it.key(), it.info());
         ++it;
     }
 

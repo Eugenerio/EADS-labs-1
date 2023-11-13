@@ -1,5 +1,6 @@
 #include "sequence.hpp"
 #include "catch2/catch_test_macros.hpp"
+#include "split.hpp"
 #include <iostream>
 #include <sstream>
 
@@ -350,36 +351,141 @@ TEST_CASE("Print"){
     CHECK(output.str() == expectedOutput);
 }
 
-//TEST_CASE("Split Position #1"){
-//    TestSeq seq;
-//    for(int i = 0; i < 25; ++i){
-//        seq.pushBack(i, i);
-//    }
-//
-//    TestSeq seq1, seq2;
-//
-//    split_pos(seq, 2, 2, 3, 4, seq1, seq2);
-//
-//    TestSeq::Iterator it = seq.begin();
-//    int expectedSeq[] = {0, 1, 22, 23, 24};
-//    for (int i : expectedSeq){
-//        CHECK(it.key() == i);
-//        ++it;
-//    }
-//
-//    TestSeq::Iterator it1 = seq1.begin();
-//    int expectedSeq1[] = {2, 3, 7, 8, 12, 13, 17, 18};
-//    for (int i : expectedSeq1)
-//    {
-//        CHECK(it1.key() == i);
-//        ++it1;
-//    }
-//
-//    TestSeq::Iterator it2 = seq2.begin();
-//    int expectedSeq2[] = {4, 5, 6, 9, 10, 11, 14, 15, 16, 19, 20, 21};
-//    for (int i : expectedSeq2)
-//    {
-//        CHECK(it2.key() == i);
-//        ++it2;
-//    }
-//}
+TEST_CASE("Split Position #1"){
+    TestSeq seq;
+    for(int i = 0; i < 25; ++i){
+        seq.pushBack(i, i);
+    }
+
+    TestSeq seq1, seq2;
+
+    split_pos(seq, 2, 2, 3, 4, seq1, seq2);
+
+    TestSeq::Iterator it = seq.begin();
+    int expectedSeq[] = {0, 1, 22, 23, 24};
+    for (int i = 0; i < 5; ++i){
+        CHECK(it.key() == expectedSeq[i]);
+        ++it;
+    }
+
+    TestSeq::Iterator it1 = seq1.begin();
+    int expectedSeq1[] = {2, 3, 7, 8, 12, 13, 17, 18};
+    for (int i = 0; i < 8; ++i)
+    {
+        CHECK(it1.key() == expectedSeq1[i]);
+        ++it1;
+    }
+
+    TestSeq::Iterator it2 = seq2.begin();
+    int expectedSeq2[] = {4, 5, 6, 9, 10, 11, 14, 15, 16, 19, 20, 21};
+    for (int i = 0; i < 12; ++i)
+    {
+        CHECK(it2.key() == expectedSeq2[i]);
+        ++it2;
+    }
+}
+
+TEST_CASE("Split Position #2"){
+    TestSeq seq;
+
+    // Create a sequence with elements from 0 to 9.
+    for (int i = 1; i <= 10; ++i)
+    {
+        seq.pushBack(i, i);
+    }
+
+    TestSeq seq1, seq2;
+
+    // Split the sequence at position 2 with an occurrence of 1, where len1=4 and len2=2.
+    split_pos(seq, 0, 1, 1, 5, seq1, seq2);
+
+    CHECK(seq.getLength() == 0);
+    CHECK(seq1.getLength() == 5);
+    CHECK(seq2.getLength() == 5);
+
+    auto it = seq1.begin();
+    int seq1_arr[] = {1, 3, 5, 7, 9};
+    for (int i = 0; i < 5; ++i)
+    {
+        CHECK(it.key() == seq1_arr[i]);
+        it++;
+    }
+    it = seq2.begin();
+    int seq2_arr[] = {2, 4, 6, 8, 10};
+    for (int i = 0; i < 5; ++i)
+    {
+        CHECK(it.key() == seq2_arr[i]);
+        it++;
+    }
+}
+
+TEST_CASE("Split Key #1"){
+    TestSeq seq;
+    int values[] = {0, 1, 2, 3, 4, 5, 6, 4, 8, 9, 4, 11, 12, 2, 14, 15, 11, 17, 23, 19, 20, 21, 22, 23, 24};
+
+    for (int i = 0; i < sizeof(values) / sizeof(values[0]); ++i)
+    {
+        seq.pushBack(values[i], values[i]);
+    }
+
+    // Perform the split
+    TestSeq seq1;
+    TestSeq seq2;
+    split_key(seq, 4, 2, 3, 2, 2, seq1, seq2);
+
+    // Check the results using iterators
+    int expectedSeq[] = {0, 1, 2, 3, 4, 5, 6, 17, 23, 19, 20, 21, 22, 23, 24};
+    TestSeq::Iterator itSeq = seq.begin();
+    for (int i = 0; i < sizeof(expectedSeq) / sizeof(expectedSeq[0]); ++i)
+    {
+        CHECK(itSeq.key() == expectedSeq[i]);
+        ++itSeq;
+    }
+
+    int expectedSeq1[] = {4, 8, 9, 12, 2, 14};
+    TestSeq::Iterator itSeq1 = seq1.begin();
+    for (int i = 0; i < sizeof(expectedSeq1) / sizeof(expectedSeq1[0]); ++i)
+    {
+        CHECK(itSeq1.key() == expectedSeq1[i]);
+        ++itSeq1;
+    }
+
+    int expectedSeq2[] = {4, 11, 15, 11};
+    TestSeq::Iterator itSeq2 = seq2.begin();
+    for (int i = 0; i < sizeof(expectedSeq2) / sizeof(expectedSeq2[0]); ++i)
+    {
+        CHECK(itSeq2.key() == expectedSeq2[i]);
+        ++itSeq2;
+    }
+}
+
+TEST_CASE("Split Key #2"){
+    TestSeq seq;
+
+    // Create a sequence with elements from 0 to 9.
+    for (int i = 1; i <= 10; ++i)
+    {
+        seq.pushBack(i, i);
+        seq.pushBack(i, i);
+    }
+
+    TestSeq seq1, seq2;
+
+    split_key(seq, 1, 1, 1, 1, 10, seq1, seq2);
+
+    CHECK(seq.getLength() == 0);
+    CHECK(seq1.getLength() == 10);
+    CHECK(seq2.getLength() == 10);
+
+    auto it1 = seq1.begin();
+    auto it2 = seq2.begin();
+    for (int i = 1; i <= 10; ++i)
+    {
+        CHECK(it1.key() == i);
+        CHECK(it2.key() == i);
+        it1++;
+        it2++;
+    }
+}
+
+

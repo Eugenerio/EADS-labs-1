@@ -91,40 +91,47 @@ public:
     private:
         Node *current;
 
-        void checkNull() const {
-            if (current == nullptr) {
-                throw std::runtime_error("Iterator is null");
-            }
-        }
-
     public:
-        explicit Iterator(Node *ptr = nullptr) : current(ptr){};
-
-        Iterator &operator=(const Iterator &src) {
-            if (this != &src) {
+        Iterator(Node *ptr = nullptr) : current(ptr){};
+        ~Iterator(){};
+        Iterator(const Iterator &src)
+        {
+            this->current = src.current;
+        };
+        Iterator &operator=(const Iterator &src)
+        {
+            if (this != &src)
+            {
                 current = src.current;
             }
             return *this;
-        }
+        };
 
-        bool operator==(const Iterator &src) const {
+        bool operator==(const Iterator &src) const
+        {
             return current == src.current;
-        }
-
-        bool operator!=(const Iterator &src) const {
+        };
+        bool operator!=(const Iterator &src) const
+        {
             return current != src.current;
-        }
+        };
 
         Iterator &operator++() {
-            checkNull();
-            if (current->next != nullptr) {
+            if (current == nullptr)
+            {
+                throw std::runtime_error("Iterator is null");
+            }
+            if (current != nullptr) {
                 current = current->next;
             }
             return *this;
         }
 
         Iterator operator++(int) {
-            checkNull();
+            if (current == nullptr)
+            {
+                throw std::runtime_error("Iterator is null");
+            }
             Iterator temp = *this;
             if (current != nullptr) {
                 current = current->next;
@@ -133,7 +140,10 @@ public:
         }
 
         Iterator operator+(int interval) {
-            checkNull();
+            if (current == nullptr)
+            {
+                throw std::runtime_error("Iterator is null");
+            }
             Iterator temp = *this;
             while (interval > 0 && temp.current != nullptr) {
                 temp++;
@@ -147,7 +157,10 @@ public:
          * @return Key& on which iterator is pointing
         */
         Key &key() const {
-            checkNull();
+            if (current == nullptr)
+            {
+                throw std::runtime_error("Iterator is null");
+            }
             return current->key;
         }
 
@@ -156,7 +169,10 @@ public:
          * @return Info& on which iterator is pointing
         */
         Info &info() const {
-            checkNull();
+            if (current == nullptr)
+            {
+                throw std::runtime_error("Iterator is null");
+            }
             return current->info;
         }
     };
@@ -476,10 +492,10 @@ ostream &operator<<(ostream &os, const Sequence<Key, Info> &sequence){
 }
 
 template <typename Key, typename Info>
-void split_pos(/*const*/ Sequence<Key, Info> &seq, int start_pos, int len1, int len2, int count, Sequence<Key, Info> &seq1, Sequence<Key, Info> &seq2);
+void split_pos(const Sequence<Key, Info> &seq, int start_pos, int len1, int len2, int count, Sequence<Key, Info> &seq1, Sequence<Key, Info> &seq2);
 
 template <typename Key, typename Info>
-void split_key(Sequence<Key, Info> &seq, const Key &start_key, int start_occ, int len1, int len2, int count, Sequence<Key, Info> &seq1, Sequence<Key, Info> &seq2);
+void split_key(const Sequence<Key, Info> &seq, const Key &start_key, int start_occ, int len1, int len2, int count, Sequence<Key, Info> &seq1, Sequence<Key, Info> &seq2);
 
 //TODO:
 // sort
