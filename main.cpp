@@ -209,6 +209,33 @@ TEST_CASE("Remove"){
     CHECK(seq.end().key() == 3);
 }
 
+TEST_CASE("Get Info"){
+    TestSeq seq;
+    seq.pushBack(1, 10);
+    seq.pushBack(1, 20);
+    seq.pushBack(2, 30);
+    seq.pushBack(3, 40);
+
+    // getInfo: element is the first one
+    CHECK(seq.getInfo(seq.begin().info(), 1) == true);
+    CHECK(seq.begin().info() == 10);
+
+    // getInfo: element is in the middle
+    CHECK(seq.getInfo(seq.begin().info(), 2) == true);
+    CHECK(seq.begin().info() == 30);
+
+    // getInfo: element is the last
+    CHECK(seq.getInfo(seq.begin().info(), 3) == true);
+    CHECK(seq.begin().info() == 40);
+
+    // getInfo: specified occurrence
+    CHECK(seq.getInfo(seq.begin().info(), 1, 2) == true);
+    CHECK(seq.begin().info() == 20);
+
+    // getInfo: element not found
+    CHECK(seq.getInfo(seq.begin().info(), 4) == false);
+}
+
 TEST_CASE("InsertAfter"){
     TestSeq seq;
     seq.pushBack(1, 1);

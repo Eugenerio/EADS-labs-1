@@ -8,62 +8,62 @@ using namespace std;
 template <typename Key, typename Info>
 class Sequence{
 private:
-    class Node{
-    private:
-        Node* next;
-
+    class Node {
     public:
         Key key;
         Info info;
+        Node* next;
 
-        Node(const Key &_key, const Info &_info, Node *_next = nullptr)
-            : key(_key), info(_info), next(_next){}
-
-        friend class Sequence;
+        Node(const Key& _key, const Info& _info, Node* _next = nullptr)
+                : key(_key), info(_info), next(_next) {}
     };
 
-    Node *head = nullptr;
-    Node *tail = nullptr;
+    Node* head = nullptr;
+    Node* tail = nullptr;
     unsigned int length = 0;
 
-    // methods
-    Node *getNode(const Key &key, unsigned int occurrence = 1){
-        Node *current = head;
+    /**
+     * @brief Finds the node with the specified key and occurrence.
+     * @param key The key to search for.
+     * @param occurrence Specifies which occurrence of the key to consider. Defaults to 1.
+     * @return Node* Pointer to the found node or nullptr if not found.
+     */
+    Node* getNode(const Key& key, unsigned int occurrence = 1) {
+        Node* current = head;
         unsigned int count = 0;
 
-        while(current != nullptr){
-            if(current->key == key){
-                count++;
-                if(count == occurrence){
-                    // found node with the specified key and occurrence
-                    return current;
-                }
+        while (current != nullptr) {
+            if (current->key == key && ++count == occurrence) {
+                return current;
             }
             current = current->next;
         }
-        // node with the specified key and occurrence is not found
+
         return nullptr;
-    };
-    Node *getNodeBefore(const Key &key, unsigned int occurrence = 1){
-        Node *prev = nullptr;
-        Node *curr = head;
+    }
+
+    /**
+     * @brief Finds the node before the node with the specified key and occurrence.
+     * @param key The key to search for.
+     * @param occurrence Specifies which occurrence of the key to consider. Defaults to 1.
+     * @return Node* Pointer to the node before the found node or nullptr if not found.
+     */
+    Node* getNodeBefore(const Key& key, unsigned int occurrence = 1) {
+        Node* prev = nullptr;
+        Node* curr = head;
         unsigned int count = 0;
 
-        while(curr != nullptr){
-            if(curr->key == key){
-                count++;
-                if(count == occurrence){
-                    // found the node with the specified key and occurrence
-                    // return the node before this node (prev)
-                    return prev;
-                }
+        while (curr != nullptr) {
+            if (curr->key == key && ++count == occurrence) {
+                return prev;
             }
             prev = curr;
             curr = curr->next;
         }
 
         return nullptr;
-    };
+    }
+
 
 public:
     Sequence() {};
@@ -73,13 +73,20 @@ public:
     Sequence(const Sequence &src) {
         *this = src;
     };
-    Sequence &operator=(const Sequence &src){
-        if(this != &src){
+
+    /**
+     * @brief Assignment operator for the Sequence class.
+     * Clears the current sequence and copies elements from the source sequence.
+     * @param src The source sequence to copy.
+     * @return Reference to the updated sequence.
+     */
+    Sequence& operator=(const Sequence& src){
+        if (this != &src) {
             clear();
             auto iterator = src.begin();
 
-            // copy elements from the src using the iterator
-            for(int i = 0; i < src.getLength(); i++){
+            // Copy elements from the src using the iterator
+            for (int i = 0; i < src.getLength(); i++) {
                 pushBack(iterator.key(), iterator.info());
                 iterator++;
             }
@@ -93,55 +100,75 @@ public:
 
     public:
         Iterator(Node *ptr = nullptr) : current(ptr){};
-        ~Iterator(){};
+        ~Iterator()= default;
         Iterator(const Iterator &src)
         {
             this->current = src.current;
         };
-        Iterator &operator=(const Iterator &src)
-        {
-            if (this != &src)
-            {
+
+        /**
+         * @brief Assignment operator for Iterator.
+         * @param src Iterator to be assigned.
+         * @return Reference to the assigned Iterator.
+         */
+        Iterator& operator=(const Iterator& src) {
+            if (this != &src) {
                 current = src.current;
             }
             return *this;
-        };
+        }
 
-        bool operator==(const Iterator &src) const
-        {
+        /**
+         * @brief Equality operator for Iterator.
+         * @param src Iterator to be compared.
+         * @return True if both iterators are equal, false otherwise.
+         */
+        bool operator==(const Iterator& src) const {
             return current == src.current;
-        };
-        bool operator!=(const Iterator &src) const
-        {
-            return current != src.current;
-        };
+        }
 
-        Iterator &operator++() {
-            if (current == nullptr)
-            {
+        /**
+         * @brief Inequality operator for Iterator.
+         * @param src Iterator to be compared.
+         * @return True if iterators are not equal, false otherwise.
+         */
+        bool operator!=(const Iterator& src) const {
+            return current != src.current;
+        }
+
+        /**
+         * @brief Prefix increment operator for Iterator.
+         * @return Reference to the incremented Iterator.
+         */
+        Iterator& operator++() {
+            if (current == nullptr) {
                 throw std::runtime_error("Iterator is null");
             }
-            if (current != nullptr) {
-                current = current->next;
-            }
+            current = current->next;
             return *this;
         }
 
+        /**
+         * @brief Postfix increment operator for Iterator.
+         * @param interval Number of positions to increment.
+         * @return Iterator before increment.
+         */
         Iterator operator++(int) {
-            if (current == nullptr)
-            {
+            if (current == nullptr) {
                 throw std::runtime_error("Iterator is null");
             }
             Iterator temp = *this;
-            if (current != nullptr) {
-                current = current->next;
-            }
+            current = current->next;
             return temp;
         }
 
+        /**
+         * @brief Addition operator for Iterator.
+         * @param interval Number of positions to move forward.
+         * @return Iterator after moving forward.
+         */
         Iterator operator+(int interval) {
-            if (current == nullptr)
-            {
+            if (current == nullptr) {
                 throw std::runtime_error("Iterator is null");
             }
             Iterator temp = *this;
@@ -153,24 +180,22 @@ public:
         }
 
         /**
-         *
-         * @return Key& on which iterator is pointing
-        */
-        Key &key() const {
-            if (current == nullptr)
-            {
+         * @brief Get the key on which the iterator is pointing.
+         * @return Reference to the key.
+         */
+        Key& key() const {
+            if (current == nullptr) {
                 throw std::runtime_error("Iterator is null");
             }
             return current->key;
         }
 
         /**
-         *
-         * @return Info& on which iterator is pointing
-        */
-        Info &info() const {
-            if (current == nullptr)
-            {
+         * @brief Get the info on which the iterator is pointing.
+         * @return Reference to the info.
+         */
+        Info& info() const {
+            if (current == nullptr) {
                 throw std::runtime_error("Iterator is null");
             }
             return current->info;
@@ -182,7 +207,7 @@ public:
      *
      * @return (int) length of the sequence
     */
-    int getLength() const{
+    [[nodiscard]] int getLength() const{
         return length;
     };
 
@@ -192,14 +217,13 @@ public:
      * @return true if the sequence is empty
      * @return false if the sequence is not empty
     */
-    bool isEmpty() const{
+    [[nodiscard]] bool isEmpty() const{
         return getLength() == 0;
     };
 
     /**
-     * Inserts a new element with the provided key and info after the specified target element
+     * @brief Inserts a new element with the provided key and info after the specified target element
      * of a given key and occurrence.
-     *
      *
      * @param key The key of the new element to insert.
      * @param info The info of the new element to insert.
@@ -207,54 +231,64 @@ public:
      * @param occurrence Specifies after which occurrence of `target_key` to insert.
      * @return true if the element was successfully inserted, false otherwise.
      */
-    bool insertAfter(const Key &key, const Info &info, const Key &target_key, unsigned int occurrence = 1){
+    bool insertAfter(const Key &key, const Info &info, const Key &target_key, unsigned int occurrence = 1) {
         Node *target = getNode(target_key, occurrence);
 
-        if(target == nullptr){
-            return false; // target is not found
+        if (target == nullptr) {
+            return false; // Target is not found.
         }
 
         Node *newNode = new Node(key, info, target->next);
         target->next = newNode;
-        if(target == tail){
-            tail = newNode; // update the tail if target is the last node
+        if (target == tail) {
+            tail = newNode; // Update the tail if the target is the last node.
         }
         length++;
         return true;
-    };
+    }
 
-    bool insertBefore(const Key &key, const Info &info, const Key &target_key, unsigned int occurrence = 1){
-        if(!exists(target_key, occurrence)){
+    /**
+     * @brief Inserts a new element with the provided key and info before the specified target element
+     * of a given key and occurrence.
+     *
+     * @param key The key of the new element to insert.
+     * @param info The info of the new element to insert.
+     * @param target_key The key before which the new element should be inserted.
+     * @param occurrence Specifies before which occurrence of `target_key` to insert.
+     * @return true if the element was successfully inserted, false otherwise.
+     */
+    bool insertBefore(const Key &key, const Info &info, const Key &target_key, unsigned int occurrence = 1) {
+        if (!exists(target_key, occurrence)) {
             return false;
         }
         Node *before = getNodeBefore(target_key, occurrence);
 
-        if(before == nullptr){
-            // required element is the first in the sequence
+        if (before == nullptr) {
+            // Required element is the first in the sequence.
             pushFront(key, info);
-        } else{
+        } else {
             Node *newNode = new Node(key, info, before->next);
             before->next = newNode;
             length++;
         }
 
         return true;
-    };
+    }
 
     /**
-     * @brief adds element to the beginning of the sequence
+     * @brief Adds an element to the beginning of the sequence.
      *
-     * @param key key to be inserted
-     * @param info info to be inserted
+     * @param key The key to be inserted.
+     * @param info The info to be inserted.
      */
-    void pushFront(const Key &key, const Info &info){
-        Node* newNode = new Node(key, info, head);
+    void pushFront(const Key &key, const Info &info) {
+        Node *newNode = new Node(key, info, head);
         head = newNode;
-        if(tail == nullptr){
+        if (tail == nullptr) {
             tail = newNode;
         }
         length++;
-    };
+    }
 
     /**
      * @brief adds an element to the end of the sequence
@@ -273,34 +307,32 @@ public:
         length++;
     };
 
-
-
     /**
-     * Removes the specified element of a given key and occurrence.
+     * @brief Removes the specified element of a given key and occurrence.
      *
      * @param key The key of the element to remove.
      * @param occurrence Specifies which occurrence of the key to consider. Defaults to 1.
      * @return true if an element was successfully removed, false otherwise.
      */
-     bool remove(const Key &key, unsigned int occurrence = 1){
-         if(!exists(key, occurrence)){
-             return false;
-         }
-         Node *before = getNodeBefore(key, occurrence);
+    bool remove(const Key &key, unsigned int occurrence = 1) {
+        if (!exists(key, occurrence)) {
+            return false;
+        }
+        Node *before = getNodeBefore(key, occurrence);
 
-         if(before == nullptr){
-             popFront();
-         } else{
-             Node *target = before->next;
-             before->next = target->next;
-             if(target == tail){
-                 tail = before;
-             }
-             delete target;
-             length--;
-         }
-         return true;
-     };
+        if (before == nullptr) {
+            popFront();
+        } else {
+            Node *target = before->next;
+            before->next = target->next;
+            if (target == tail) {
+                tail = before;
+            }
+            delete target;
+            length--;
+        }
+        return true;
+    }
 
     /**
     * @brief removes first element in sequence
@@ -383,7 +415,25 @@ public:
     * @param occurrence Specifies which occurrence of the key to consider. Defaults to 1.
     * @return true if the element was found and the associated info was retrieved, false otherwise.
     */
-    bool getInfo(Info &info, const Key &key, unsigned int occurrence = 1) const;
+    bool getInfo(Info &info, const Key &key, unsigned int occurrence = 1) const{
+        Node *current = head;
+        unsigned int count = 0;
+
+        while (current != nullptr) {
+            if (current->key == key) {
+                count++;
+                if (count == occurrence) {
+                    // Found the specified element with the given key and occurrence.
+                    info = current->info;
+                    return true;
+                }
+            }
+            current = current->next;
+        }
+
+        // Element with the specified key and occurrence is not found.
+        return false;
+    };
 
     /**
      * Searches for the specified element of a given key and occurrence.
@@ -424,17 +474,14 @@ public:
      * @param [out] it is iterator pointing on found element
      * @return true if the specified element is found, false otherwise.
     */
-    int search(Iterator &iterator, const Key &key, unsigned int occurrence = 1){
+    bool search(Iterator &iterator, const Key &key, unsigned int occurrence = 1) {
         Node *searchNode = getNode(key, occurrence);
-
-        if(searchNode != nullptr){
-            // update the provider iterator to point to the found element
+        if (searchNode) {
             iterator = Iterator(searchNode);
             return true;
         }
-
         return false; // not found
-    };
+    }
 
     /**
      * Searches for the specified element before element with given key and occurrence
@@ -444,16 +491,14 @@ public:
      * @param [out] it is iterator pointing on found element.
      * @return true if the specified element is found, false otherwise.
     */
-    bool searchBefore(Iterator &iterator, const Key &key, unsigned int occurrence = 1){
+    bool searchBefore(Iterator &iterator, const Key &key, unsigned int occurrence = 1) {
         Node *beforeNode = getNodeBefore(key, occurrence);
-
-        if(beforeNode != nullptr){
+        if (beforeNode) {
             iterator = Iterator(beforeNode);
             return true;
         }
-
         return false;
-    };
+    }
 
     /**
      * Returns first or last element of sequence.
@@ -490,17 +535,5 @@ ostream &operator<<(ostream &os, const Sequence<Key, Info> &sequence){
 
     return os;
 }
-
-template <typename Key, typename Info>
-void split_pos(const Sequence<Key, Info> &seq, int start_pos, int len1, int len2, int count, Sequence<Key, Info> &seq1, Sequence<Key, Info> &seq2);
-
-template <typename Key, typename Info>
-void split_key(const Sequence<Key, Info> &seq, const Key &start_key, int start_occ, int len1, int len2, int count, Sequence<Key, Info> &seq1, Sequence<Key, Info> &seq2);
-
-//TODO:
-// sort
-// reverse
-// swap
-// subSequence
 
 #endif
