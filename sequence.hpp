@@ -150,7 +150,7 @@ public:
 
         /**
          * @brief Postfix increment operator for Iterator.
-         * @param interval Number of positions to increment.
+         * @param int Number of positions to increment.
          * @return Iterator before increment.
          */
         Iterator operator++(int) {

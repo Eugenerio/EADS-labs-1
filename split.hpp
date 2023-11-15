@@ -115,4 +115,38 @@ void split_key(/*const*/ Sequence<Key, Info> &seq, const Key &start_key, int sta
     seq = new_sequence;
 }
 
+//merge sequence  1 by 1 ( 2 src sequences, that will merge 1 by one)
+
+template <typename Key, typename Info>
+void merge_seq(/*const*/ Sequence<Key, Info> &seq1, Sequence<Key, Info> &seq2, Sequence<Key, Info> &res_seq){
+    typename Sequence<Key, Info>::Iterator it1 = seq1.begin();
+    typename Sequence<Key, Info>:: Iterator it2 = seq2.begin();
+
+    while(it1 != seq1.end() && it2 != seq2.end()){
+            res_seq.pushBack(it1.key(), it1.info());
+            res_seq.pushBack(it2.key(), it2.info());
+            ++it1;
+            ++it2;
+    }
+
+    // if one sequence is longer then other one
+    while(it1 != seq1.end()){
+        res_seq.pushBack(it1.key(), it1.info());
+        ++it1;
+    }
+
+    while(it2 != seq2.end()){
+        res_seq.pushBack(it2.key(), it2.info());
+        ++it2;
+    }
+
+    while (it1 != seq1.empty() && it2 != seq2.empty())
+    {
+        res_seq.pushBack(it1.key(), it1.info());
+        res_seq.pushBack(it2.key(), it2.info());
+        ++it1;
+        ++it2;
+    }
+}
+
 #endif

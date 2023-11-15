@@ -515,4 +515,33 @@ TEST_CASE("Split Key #2"){
     }
 }
 
+TEST_CASE("Merge seq") {
+    TestSeq seq1;
 
+    // Create a sequence with elements from 1 to 5.
+    for (int i = 1; i <= 5; ++i) {
+        seq1.pushBack(i, i);
+    }
+
+    TestSeq seq2;
+
+    // Create a sequence with elements from 1 to 6.
+    for (int i = 1; i <= 6; ++i) {
+        seq2.pushBack(i, i);
+    }
+
+    TestSeq res_seq;
+
+    merge_seq(seq1, seq2, res_seq);
+
+    CHECK(res_seq.getLength() == 11);
+
+    TestSeq::Iterator it2 = res_seq.begin();
+    int expectedSeq2[] = {1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6};
+
+    for (int i = 0; i < 11; ++i) {
+        // Assuming each element is a pair, you may need to adjust this comparison
+        CHECK(it2.key() == expectedSeq2[i]);
+        ++it2;
+    }
+}
